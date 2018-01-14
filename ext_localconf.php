@@ -30,11 +30,18 @@ $signalSlotDispatcher->connect(
     'writeLog'
 );
 
-// Configure the Logging API
-$GLOBALS['TYPO3_CONF_VARS']['LOG']['SchamsNet']['BeLoginLogging']['Service']['writerConfiguration'] = [
+// Register hook on successful BE user login
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_userauthgroup.php']['backendUserLogin'][] =
+    \SchamsNet\BeLoginLogging\Hooks\BackendUserLogin::class . '->dispatch';
+
+// Configure logging API
+$logging = [
     \TYPO3\CMS\Core\Log\LogLevel::INFO => array(
         'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => array(
             'logFile' => 'typo3temp/var/logs/be_login_logging.log'
         )
     )
 ];
+
+$GLOBALS['TYPO3_CONF_VARS']['LOG']['SchamsNet']['BeLoginLogging']['Service']['writerConfiguration'] = $logging;
+$GLOBALS['TYPO3_CONF_VARS']['LOG']['SchamsNet']['BeLoginLogging']['Hooks']['writerConfiguration'] = $logging;
