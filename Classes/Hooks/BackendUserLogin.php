@@ -40,7 +40,7 @@ class BackendUserLogin
         /** @var $logger \TYPO3\CMS\Core\Log\Logger */
         $this->logger = GeneralUtility::makeInstance('TYPO3\CMS\Core\Log\LogManager')->getLogger(__CLASS__);
 
-        if (is_array($backendUser) && array_key_exists('user', $backendUser)) {
+        if (isset($backendUser['user']['username'])) {
             $this->user = $backendUser['user'];
             $this->writeLog();
         }
